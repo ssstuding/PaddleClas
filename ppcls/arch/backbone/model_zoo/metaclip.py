@@ -2,6 +2,28 @@ import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
 
+from ....utils.save_load import load_dygraph_pretrain
+
+MODEL_URLS = {
+    "MetaCLIP_B_16":
+    "https://paddle-model-ecology.bj.bcebos.com/paddlex/official_pretrained_model/MetaCLIP_B_16_pretrained.pdparams",
+}
+
+__all__ = list(MODEL_URLS.keys())
+
+
+def _load_pretrained(pretrained, model, model_url, use_ssld=False):
+    if pretrained is False:
+        pass
+    elif pretrained is True:
+        load_dygraph_pretrain(model, model_url, use_ssld=use_ssld)
+    elif isinstance(pretrained, str):
+        load_dygraph_pretrain(model, pretrained)
+    else:
+        raise RuntimeError(
+            "pretrained type is not available. Please use `string` or `boolean` type."
+        )
+
 
 class Mlp(nn.Layer):
     def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, drop=0.):
@@ -108,7 +130,7 @@ class MetaCLIP(nn.Layer):
         return x
 
 
-def MetaCLIP_B_16(**kwargs):
+def MetaCLIP_B_16(pretrained=False, use_ssld=False, **kwargs):
     model_kwargs = dict(
         img_size=224,
         patch_size=16,
@@ -122,4 +144,9 @@ def MetaCLIP_B_16(**kwargs):
     )
     model_kwargs.update(kwargs)
     model = MetaCLIP(**model_kwargs)
+    _load_pretrained(
+        pretrained,
+        model,
+        MODEL_URLS["MetaCLIP_B_16"],
+        use_ssld=use_ssld)
     return model

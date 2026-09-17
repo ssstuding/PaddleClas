@@ -1,8 +1,7 @@
 # global configs
-# This config supports ImageNet-style training, evaluation, and inference for MetaCLIP-B/16.
 Global:
   checkpoints: null
-  pretrained_model: null  # e.g. ./weights/MetaCLIP_B_16_pretrained.pdparams
+  pretrained_model: null
   output_dir: ./output/
   device: gpu
   save_interval: 10
@@ -71,7 +70,6 @@ Optimizer:
 
 
 # data loader for train and eval
-# Update image_root and cls_label_path to your local ImageNet-style dataset paths before training.
 DataLoader:
   Train:
     dataset:
